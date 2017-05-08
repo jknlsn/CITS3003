@@ -1,0 +1,130 @@
+The skeleton code and the files provided here are for the Apple computers
+in the CSSE labs. If you have different settings on your home computer,
+you would need to make suitable modification to the files here. Please
+note that, in the marking of the project, your program would be tested
+on the CSSE lab PCs or Macs.
+
+------------------------------------
+
+The skeleton code provided here is for the project. Below is a brief
+explanation about some of the important files in this directory.
+
+Makefile - use this file to manage your project. To compile your program, type:
+		make
+	To clean up the directory (delete files that can be regenerated), type:
+		make clobber
+	You will notice that a directory with the name "scene-start.dSYM" is
+	created in the directory from the compilation process. This is because we
+	specify the -g flag for the GCC_OPTIONS in the Makefile. The -g flag
+	denotes that we want to turn on the debugger so the scene-start.dSYM
+	directory is created to store additional information for the debugger. You
+	can switch off the debugger by deleting the -g flag.
+
+assimp.h and bitmap.h - you shouldn't need to make any changes to these header
+	files. They are needed by scene-start.cpp.
+
+bitmap.c - you shouldn't need to make any changes to this c file either. It is
+	required by scene-start.cpp.
+
+vStart.glsl and fStart.glsl - these are the vertex shader and fragment shader
+	for scene-start.cpp.
+
+gnatidread.h - you shouldn't need to modify the code in this file, but feel
+	free to.  If you do, you should mark your changes with comments in the
+	code. You should of course include your version of the file in your
+	submission.
+
+libassimp.3.1.1.dylib - this is the dynamic library file of assimp version
+	3.1.1.  Assimp (http://www.assimp.org/) is a portable Open Source library
+	that allows us to import various well-known 3D model formats. Version
+	3.1.1 is probably not the latest version but it works OK for the project.
+	I compiled the source files of libassimp to generate the dynamic library
+	file.  The file has been tested in our Mac lab.
+
+    If you want to get the project running on your home computer, you may
+    need to download the source files for assimp and compile them yourself.
+    I suggest that you try the dynamic library file provided here first.
+    If it works on your computer, then it saves you a lot of time.
+
+libassimp.3.dylib and libassimp.dylib - these are small symbolic link files
+	pointing to libassimp.3.1.1.dylib in turn. They are not included in the
+	zip file given to you. However, you should be able to create them by
+	running the script file 'setup-once' (please see below). After running the
+	script file, type:
+		ls -l
+	in a command prompt window. You should see the two files created and what
+	they are pointing to.
+
+	Note: we could, of course, copy libassimp.3.1.1.dylib to libassimp.3.dylib
+	and libassimp.dylib. The symbolic links allow us to refer to the dynamic
+	library as using the flag -lassimp (see the Makefile) and save us a
+	lot of disk space.
+
+models-textures - this is a subdirectory containing many small images serving
+	as texture maps for the project. You should download the password
+	encrypted zip file supplied separately on the web and extract the zip file
+	here.
+
+scene-start.cpp - this is the main cpp program that you need to expand for the
+	project. 
+
+setup-once - this is a csh script file that helps you set up two small symbolic
+	link files. To run the script, simply type (in a terminal window):
+		./setup-once
+	If you already have the two symbolic link files created, do you run
+	this script again as the system would complain that the files already exist
+	and can be recreated.
+
+setup - this file shows you how to setup the environment variable
+	DYLD_LIBRARY_PATH.  The setup of this environment variable is necessary as
+	libassimp was created as a dynamic library. When running any program that
+	links with one (or more) dynamic library, the system looks at this
+	environment variable for the paths (or directories) where dynamic library
+	files are stored.  Even though we have put libassimp.3.1.1.dylib in the
+	same directory as our scene-start.cpp, your program would not run if this
+	environment variable is not set up. You would see error messages such as
+	the following:
+
+	dyld: Library not loaded: /Users/du/CITS3003/project/assimp-3.1.1/lib/libassimp.3.dylib
+  	Referenced from: /Users/du/CITS3003/..../MAC_VERSIONS/./scene-start
+	Reason: image not found
+	Trace/BPT trap: 5
+
+	To set up the environment variable DYLD_LIBRARY_PATH, type:
+		source ./setup
+	Every time you invoke a new terminal window to run the program
+	scene-start, you need to type the command above to set up the environment
+	variable.
+
+	An alternative solution is to find out what Shell you are using and put
+	the line
+		export DYLD_LIBRARY_PATH=.
+	in the appropriate resource file which would be looked at whenever a new
+	terminal window is created. e.g.,
+	- if you use bash, then put the line in your ~/.bashrc or ~/.profile file
+	- if you use csh, then put the line in your ~/.cshrc file
+	- if you use zsh, then put the line in your ~/.zshrc file
+	(~/ denotes your home directory. So ~/.bashrc means the file .bashrc in
+	your home directory)
+
+	Note that if you have other dynamic library files for other applications
+	stored somewhere else, you would need to modify the definition for the
+	environment variable DYLD_LIBRARY_PATH to something like:
+		export DYLD_LIBRARY_PATH=/usr/lib:/usr/local/lib:.
+	where /usr/lib and /usr/local/lib are the two system directories that
+	store your other dynamic library files.
+
+	If what is described above does not make sense to you, then don't worry.
+	Just type: source ./setup
+	when you open a new terminal window to run your program.
+
+scene-start - this file is not supplied to you. However, you should be able to
+	generate it by compiling scene-start.cpp. You should be able to run the
+	program (after you have set up the symbolic links and environment variable
+	mentioned above).  You should be able to click the right mouse button
+	inside the window of the program to bring up a menu and select menu items
+	etc. However, not everything is working of course.
+
+
+Du Huynh
+April 2017

@@ -1,0 +1,14 @@
+#!/bin/csh
+#
+#This C-shell script helps you set up the symbolic links to the dynamic library
+#file for assimp. You only need to run this script once.  The actual assimp
+#library file is libassimp.3.1.1.dylib. This is a very large file. The other
+#two dylib files should just be symbolic links pointing to this file. These
+#symbolic links are just small files in the directory. Once the symbolic
+#links have been created, they stay in the directory permanently.
+#
+#Du Huynh
+#April 2016.
+
+ln -s libassimp.3.1.1.dylib libassimp.3.dylib 
+ln -s libassimp.3.dylib libassimp.dylib
