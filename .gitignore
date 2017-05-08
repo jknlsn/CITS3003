@@ -31,3 +31,11 @@
 *.exe
 *.out
 *.app
+
+### Added ###
+
+# Mac
+.DS_Store
+
+# Models folder
+models-textures
