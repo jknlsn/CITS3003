@@ -9,6 +9,7 @@ uniform vec3 AmbientProduct, DiffuseProduct, SpecularProduct;
 uniform mat4 ModelView;
 uniform mat4 Projection;
 uniform vec4 LightPosition;
+// TODO: add second light source position
 uniform float Shininess;
 
 void main()
@@ -18,8 +19,7 @@ void main()
     // Transform vertex position into eye coordinates
     vec3 pos = (ModelView * vpos).xyz;
 
-
-    // The vector to the light from the vertex    
+    // The vector to the light from the vertex
     vec3 Lvec = LightPosition.xyz - pos;
 
     // Unit direction vectors for Blinn-Phong shading calculation
@@ -39,14 +39,19 @@ void main()
 
     float Ks = pow( max(dot(N, H), 0.0), Shininess );
     vec3  specular = Ks * SpecularProduct;
-    
+
     if (dot(L, N) < 0.0 ) {
-	specular = vec3(0.0, 0.0, 0.0);
-    } 
+	      specular = vec3(0.0, 0.0, 0.0);
+    }
+
+    // NOTE: implemented F basically
+    // Still need to subtract pos situationally
+    // Implement for second light source and in other file
+    float fade = (0.5 * length(LightPosition.xyz - pos));
 
     // globalAmbient is independent of distance from the light source
     vec3 globalAmbient = vec3(0.1, 0.1, 0.1);
-    color.rgb = globalAmbient  + ambient + diffuse + specular;
+    color.rgb = globalAmbient + ambient + (diffuse + specular) / fade;
     color.a = 1.0;
 
     gl_Position = Projection * ModelView * vpos;
