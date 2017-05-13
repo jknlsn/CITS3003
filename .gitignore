@@ -39,3 +39,10 @@
 
 # Models folder
 models-textures
+
+# Text log files
+*.txt
+
+# Compiled program
+scene-start
+scene-start.dSYM
