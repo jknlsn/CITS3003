@@ -16,6 +16,8 @@ GLint windowHeight=640, windowWidth=960;
 // gnatidread.cpp is the CITS3003 "Graphics n Animation Tool Interface & Data
 // Reader" code.  This file contains parts of the code that you shouldn't need
 // to modify (but, you can).
+
+// Modified to fix camera angle on left click.
 #include "gnatidread.h"
 
 using namespace std;        // Import the C++ standard functions (e.g., min)
@@ -26,7 +28,8 @@ GLuint shaderProgram; // The number identifying the GLSL shader program
 GLuint vPosition, vNormal, vTexCoord; // IDs for vshader input vars (from glGetAttribLocation)
 GLuint projectionU, modelViewU; // IDs for uniform variables (from glGetUniformLocation)
 
-static float viewDist = 3.5; // Distance from the camera to the centre of the scene
+// Increased by a factor of 4
+static float viewDist = 6; // Distance from the camera to the centre of the scene
 static float camRotSidewaysDeg=0; // rotates the camera sideways around the centre
 static float camRotUpAndOverDeg=20; // rotates the camera up and over the centre.
 
@@ -225,9 +228,10 @@ static void adjustScaleY(vec2 sy)
 //------around the centre of the scene.---------------------------------------
 //----------------------------------------------------------------------------
 
+// Increased by a factor of 4 to accomodate greater viewDist
 static void doRotate()
 {
-    setToolCallbacks(adjustCamrotsideViewdist, mat2(400,0,0,-2),
+    setToolCallbacks(adjustCamrotsideViewdist, mat2(400,0,0,-8),
                      adjustcamSideUp, mat2(400, 0, 0,-90) );
 }
 
@@ -489,6 +493,24 @@ static int createArrayMenu(int size, const char menuEntries[][128], void(*menuFn
     return menuId;
 }
 
+// NOTE: C
+// adjusting the amounts of ambient, diffuse and specular light,
+// as well as the amount of shine
+
+static void adjustAmbientDiffuse(vec2 ambience) {
+	SceneObject *obj = &sceneObjs[toolObj];
+	obj -> ambient = max(0.0f, obj -> ambient + ambience[0]);
+	obj -> diffuse = max(0.0f, obj -> diffuse + ambience[1]);
+}
+
+static void adjustSpecularShine(vec2 shine) {
+	SceneObject *obj = &sceneObjs[toolObj];
+	obj -> specular = max(0.0f, obj -> specular + shine[0]);
+	obj -> shine = max(0.0f, obj -> shine + shine[1]);
+}
+
+// end NOTE: C
+
 static void materialMenu(int id)
 {
     deactivateTool();
@@ -498,7 +520,14 @@ static void materialMenu(int id)
         setToolCallbacks(adjustRedGreen, mat2(1, 0, 0, 1),
                          adjustBlueBrightness, mat2(1, 0, 0, 1) );
     }
+    // NOTE: C
     // You'll need to fill in the remaining menu items here.
+    else if (id == 20) {
+      toolObj = currObject;
+      setToolCallbacks(adjustAmbientDiffuse, mat2(1, 0, 0, 1),
+        adjustSpecularShine, mat2(1, 0, 0, 10));
+    }
+    // end NOTE: C
     else {
         printf("Error in materialMenu\n");
     }
@@ -540,7 +569,8 @@ static void makeMenu()
 
     int materialMenuId = glutCreateMenu(materialMenu);
     glutAddMenuEntry("R/G/B/All",10);
-    glutAddMenuEntry("UNIMPLEMENTED: Ambient/Diffuse/Specular/Shine",20);
+    // C: Now implemented
+    glutAddMenuEntry("Ambient/Diffuse/Specular/Shine",20);
 
     int texMenuId = createArrayMenu(numTextures, textureMenuEntries, texMenu);
     int groundMenuId = createArrayMenu(numTextures, textureMenuEntries, groundMenu);
@@ -599,11 +629,24 @@ void reshape( int width, int height )
     //         that the same part of the scene is visible across the width of
     //         the window.
 
-    GLfloat nearDist = 0.2;
-    projection = Frustum(-nearDist*(float)width/(float)height,
-                         nearDist*(float)width/(float)height,
-                         -nearDist, nearDist,
-                         nearDist, 100.0);
+    GLfloat nearDist = 0.01;
+    GLfloat right, left, top, bottom;
+
+    if (width < height) {
+      right = nearDist;
+      left = -nearDist;
+  		top = nearDist * (float) height / (float) width;
+      bottom = -nearDist * (float) height / (float) width;
+    }
+    else {
+      right = nearDist * (float) width / (float) height;
+      left = -nearDist * (float) width / (float) height;
+  		top = nearDist;
+      bottom = -nearDist;
+    }
+
+    projection = Frustum(left, right, bottom, top,
+                         nearDist, 400.0);
 }
 
 //----------------------------------------------------------------------------
