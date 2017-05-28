@@ -401,7 +401,7 @@ void display( void )
     // NOTE: I
     SceneObject lightObj2 = sceneObjs[2];
     // only need to apply rotation not view
-    vec4 lightPosition2 = rotation * lightObj2.loc ;
+    vec4 lightPosition2 = view * lightObj2.loc ;
 
     glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition2"),
                   1, lightPosition2);
