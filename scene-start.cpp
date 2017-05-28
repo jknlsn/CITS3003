@@ -311,6 +311,7 @@ void init( void )
     sceneObjs[1].brightness = 0.1; // The light's brightness is 5 times this (below).
 
     // NOTE: I
+    // Light is directional rather than positonal
     addObject(55); // Sphere for the first light
     sceneObjs[2].loc = vec4(2.5, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
