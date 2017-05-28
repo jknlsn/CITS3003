@@ -4,11 +4,13 @@ attribute vec2 vTexCoord;
 
 varying vec3 N;
 varying vec3 pos;
-varying vec3 Lvec;
+varying vec3 Lvec1;
+varying vec3 Lvec2;
 varying vec2 texCoord;
 
 uniform mat4 ModelView;
-uniform vec4 LightPosition;
+uniform vec4 LightPosition1;
+uniform vec4 LightPosition2;
 uniform mat4 Projection;
 
 void main()
@@ -21,12 +23,9 @@ void main()
 
 
     // The vector to the light from the vertex
-    Lvec = LightPosition.xyz - pos;
+    Lvec1 = LightPosition1.xyz - pos;
+    Lvec2 = LightPosition2.xyz - pos;
 
-    // L = normalize( Lvec );   // Direction to the light source
-    // E = normalize( -pos );   // Direction to the eye/camera
-    // H = normalize( L + E );  // Halfway vector
-    //
     // // Transform vertex normal into eye coordinates (assumes scaling
     // // is uniform across dimensions)
     // // vec3 N = normalize( (ModelView*vec4(vNormal, 0.0)).xyz );

@@ -310,6 +310,14 @@ void init( void )
     sceneObjs[1].texId = 0; // Plain texture
     sceneObjs[1].brightness = 0.2; // The light's brightness is 5 times this (below).
 
+    // NOTE: I
+    addObject(55); // Sphere for the first light
+    sceneObjs[2].loc = vec4(2.0, 1.5, 1.0, 1.0);
+    sceneObjs[2].scale = 0.1;
+    sceneObjs[2].texId = 0; // Plain texture
+    sceneObjs[2].brightness = 0.2; // The light's brightness is 5 times this (below).
+    // end NOTE: I
+
     addObject(rand() % numMeshes); // A test mesh
 
     // We need to enable the depth test to discard fragments that
@@ -384,11 +392,21 @@ void display( void )
     // end NOTE: A
 
     SceneObject lightObj1 = sceneObjs[1];
-    vec4 lightPosition = view * lightObj1.loc ;
+    vec4 lightPosition1 = view * lightObj1.loc ;
 
-    glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition"),
-                  1, lightPosition);
+    glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition1"),
+                  1, lightPosition1);
     CheckError();
+
+    // NOTE: I
+    SceneObject lightObj2 = sceneObjs[2];
+    // only need to apply rotation not view
+    vec4 lightPosition2 = rotation * lightObj2.loc ;
+
+    glUniform4fv( glGetUniformLocation(shaderProgram, "LightPosition2"),
+                  1, lightPosition2);
+    CheckError();
+    // end NOTE: I
 
     for (int i=0; i < nObjects; i++) {
         SceneObject so = sceneObjs[i];
@@ -462,6 +480,17 @@ static void lightMenu(int id)
     }
     else if (id >= 71 && id <= 74) {
         toolObj = 1;
+        setToolCallbacks(adjustRedGreen, mat2(1.0, 0, 0, 1.0),
+                         adjustBlueBrightness, mat2(1.0, 0, 0, 1.0) );
+    }
+    else if (id == 80) {
+        toolObj = 2;
+        setToolCallbacks(adjustLocXZ, camRotZ(),
+                         adjustBrightnessY, mat2( 1.0, 0.0, 0.0, 10.0) );
+
+    }
+    else if (id >= 81 && id <= 84) {
+        toolObj = 2;
         setToolCallbacks(adjustRedGreen, mat2(1.0, 0, 0, 1.0),
                          adjustBlueBrightness, mat2(1.0, 0, 0, 1.0) );
     }
