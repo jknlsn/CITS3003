@@ -43,9 +43,9 @@ void main()
     vec4 ambient2 = vec4((LightColor2 * LightBrightness2),1.0) * vec4(AmbientProduct,1.0);
 
     float Kd1 = max( dot(L1, N), 0.0 );
-    vec4  diffuse1 = Kd1 * vec4(DiffuseProduct,1.0);
+    vec4  diffuse1 = Kd1 * vec4((LightColor1 * LightBrightness1),1.0) * vec4(DiffuseProduct,1.0);
     float Kd2 = max( dot(L2, N), 0.0 );
-    vec4  diffuse2 = Kd2 * vec4(DiffuseProduct,1.0);
+    vec4  diffuse2 = Kd2 * vec4((LightColor2 * LightBrightness2),1.0) * vec4(DiffuseProduct,1.0);
 
     float Ks1 = pow( max(dot(N, H1), 0.0), Shininess );
     vec4  specular1 = Ks1 * LightBrightness1 * vec4(SpecularProduct,1.0);
@@ -61,7 +61,12 @@ void main()
 
     // globalAmbient is independent of distance from the light source
     vec4 globalAmbient = vec4(0.1, 0.1, 0.1, 1.0);
-    color = globalAmbient + ambient1 + ambient2 + diffuse1 + specular1 + diffuse2 + specular2;
+
+    // NOTE: F
+    float dist = 0.01 + length(Lvec1);
+    // end NOTE: F
+
+    color = globalAmbient + ((ambient1 + diffuse1) / dist) + (ambient2 + diffuse2);
     color.a = 1.0;
-    gl_FragColor = color * texture2D( texture, texCoord * 2.0 );
+    gl_FragColor = color * texture2D( texture, texCoord * 2.0 ) + (specular1 / dist) + specular2;
 }

@@ -424,7 +424,8 @@ void display( void )
         SceneObject so = sceneObjs[i];
 
         // Modified to acount for both lights
-        vec3 rgb = ((so.rgb * lightObj1.rgb) + (so.rgb * lightObj2.rgb)) * ((so.brightness * lightObj1.brightness) + (so.brightness * lightObj2.brightness)) * 2.0;
+        // vec3 rgb = ((so.rgb * lightObj1.rgb) + (so.rgb * lightObj2.rgb)) * ((so.brightness * lightObj1.brightness) + (so.brightness * lightObj2.brightness)) * 2.0;
+        vec3 rgb = so.rgb * so.brightness * 2.0;
         glUniform3fv( glGetUniformLocation(shaderProgram, "AmbientProduct"), 1, so.ambient * rgb );
         CheckError();
         glUniform3fv( glGetUniformLocation(shaderProgram, "DiffuseProduct"), 1, so.diffuse * rgb );
