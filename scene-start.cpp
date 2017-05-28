@@ -409,6 +409,17 @@ void display( void )
     CheckError();
     // end NOTE: I
 
+    // NOTE: H
+    // Added the brightness and color into lighting calculations
+    glUniform3fv(glGetUniformLocation(shaderProgram, "LightColor1"), 1, lightObj1.rgb); CheckError();
+  	glUniform3fv(glGetUniformLocation(shaderProgram, "LightColor2"), 1, lightObj2.rgb); CheckError();
+    glUniform1f(glGetUniformLocation(shaderProgram, "LightBrightness1"), lightObj1.brightness);
+    CheckError();
+  	glUniform1f(glGetUniformLocation(shaderProgram, "LightBrightness2"), lightObj2.brightness);
+    CheckError();
+
+    //  end NOTE: H
+
     for (int i=0; i < nObjects; i++) {
         SceneObject so = sceneObjs[i];
 
