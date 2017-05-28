@@ -308,14 +308,14 @@ void init( void )
     sceneObjs[1].loc = vec4(2.0, 1.0, 1.0, 1.0);
     sceneObjs[1].scale = 0.1;
     sceneObjs[1].texId = 0; // Plain texture
-    sceneObjs[1].brightness = 0.2; // The light's brightness is 5 times this (below).
+    sceneObjs[1].brightness = 0.1; // The light's brightness is 5 times this (below).
 
     // NOTE: I
     addObject(55); // Sphere for the first light
-    sceneObjs[2].loc = vec4(2.0, 1.5, 1.0, 1.0);
+    sceneObjs[2].loc = vec4(2.5, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
     sceneObjs[2].texId = 0; // Plain texture
-    sceneObjs[2].brightness = 0.2; // The light's brightness is 5 times this (below).
+    sceneObjs[2].brightness = 0.1; // The light's brightness is 5 times this (below).
     // end NOTE: I
 
     addObject(rand() % numMeshes); // A test mesh
@@ -411,7 +411,8 @@ void display( void )
     for (int i=0; i < nObjects; i++) {
         SceneObject so = sceneObjs[i];
 
-        vec3 rgb = so.rgb * lightObj1.rgb * so.brightness * lightObj1.brightness * 2.0;
+        // Modified to acount for both lights
+        vec3 rgb = ((so.rgb * lightObj1.rgb) + (so.rgb * lightObj2.rgb)) * ((so.brightness * lightObj1.brightness) + (so.brightness * lightObj2.brightness)) * 2.0;
         glUniform3fv( glGetUniformLocation(shaderProgram, "AmbientProduct"), 1, so.ambient * rgb );
         CheckError();
         glUniform3fv( glGetUniformLocation(shaderProgram, "DiffuseProduct"), 1, so.diffuse * rgb );
