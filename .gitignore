@@ -46,3 +46,7 @@ models-textures
 # Compiled program
 scene-start
 scene-start.dSYM
+
+# Report
+*.md
+*.pdf

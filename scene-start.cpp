@@ -588,6 +588,30 @@ static void adjustAngleZTexscale(vec2 az_ts)
     sceneObjs[currObject].texScale+=az_ts[1];
 }
 
+static void duplicateObject(int id) {
+	if (nObjects == maxObjects) return;
+
+	sceneObjs[nObjects] = sceneObjs[id];
+	toolObj = currObject = nObjects++;
+	setToolCallbacks(adjustLocXZ, camRotZ(),
+			adjustScaleY, mat2(0.05, 0.0, 0.0, 10.0));
+	glutPostRedisplay();
+}
+
+static void deleteObject(int id) {
+	if (nObjects == 3) return;
+
+	nObjects--;
+  if(currObject > 3) {
+   currObject = nObjects - 1;
+  } else {
+   currObject = - 1;
+  }
+	toolObj = -1;
+	doRotate();
+	glutPostRedisplay();
+}
+
 static void mainmenu(int id)
 {
     deactivateTool();
@@ -602,6 +626,12 @@ static void mainmenu(int id)
     else if (id == 55 && currObject>=0) {
         setToolCallbacks(adjustAngleYX, mat2(400, 0, 0, 400),
                          adjustAngleZTexscale, mat2(-400, 0, 0, 15) );
+    }
+    else if (id == 90 && currObject >= 0) {
+      duplicateObject(currObject);
+    }
+    else if (id == 91 && currObject >= 0) {
+      deleteObject(currObject);
     }
     else if (id == 99) exit(0);
 }
@@ -633,6 +663,8 @@ static void makeMenu()
     glutAddSubMenu("Texture",texMenuId);
     glutAddSubMenu("Ground Texture",groundMenuId);
     glutAddSubMenu("Lights",lightMenuId);
+    glutAddMenuEntry("Duplicate object",90);
+    glutAddMenuEntry("Delete object",91);
     glutAddMenuEntry("EXIT", 99);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -645,7 +677,46 @@ void keyboard( unsigned char key, int x, int y )
     case 033:
         exit( EXIT_SUCCESS );
         break;
-    }
+      }
+}
+
+// NOTE: I [JAKE]
+// Implemented toggle with up and down arrow keys to change
+// current object selected
+// end NOTE: I
+
+void special( int key, int x, int y )
+{
+    switch ( key ) {
+    case GLUT_KEY_UP:
+        cout << "UP PRESSED\n";
+        cout << currObject;
+        cout << "\n";
+        if(currObject == nObjects)
+        {
+            currObject = currObject;
+        }
+        else
+        {
+          currObject++;
+        }
+        toolObj = currObject;
+        break;
+    case GLUT_KEY_DOWN:
+        cout << "DOWN PRESSED\n";
+        cout << currObject;
+        cout << "\n";
+        if(currObject == 3)
+        {
+            currObject = 3;
+        }
+        else
+        {
+            currObject--;
+        }
+        toolObj = currObject;
+        break;
+      }
 }
 
 //----------------------------------------------------------------------------
@@ -757,6 +828,7 @@ int main( int argc, char* argv[] )
 
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
+    glutSpecialFunc( special );
     glutIdleFunc( idle );
 
     glutMouseFunc( mouseClickOrScroll );
