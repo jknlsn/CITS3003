@@ -76,6 +76,10 @@ int nObjects = 0;    // How many objects are currenly in the scene.
 int currObject = -1; // The current object
 int toolObj = -1;    // The object currently being modified
 
+// Additional functionality
+// bool grouped = false;
+bool grouped = false;
+
 //----------------------------------------------------------------------------
 //
 // Loads a texture by number, and binds it for later use.
@@ -214,12 +218,28 @@ static void adjustcamSideUp(vec2 su)
 
 static void adjustLocXZ(vec2 xz)
 {
-    sceneObjs[toolObj].loc[0]+=xz[0]; sceneObjs[toolObj].loc[2]+=xz[1];
+    // Additional functionality, if grouped then move all objects
+    if (grouped)
+      for (int i = 3; i < nObjects; i++){
+        sceneObjs[i].loc[0]+=xz[0]; sceneObjs[i].loc[2]+=xz[1];
+      }
+    else
+    {
+        sceneObjs[toolObj].loc[0]+=xz[0]; sceneObjs[toolObj].loc[2]+=xz[1];
+    }
 }
 
 static void adjustScaleY(vec2 sy)
 {
-    sceneObjs[toolObj].scale+=sy[0]; sceneObjs[toolObj].loc[1]+=sy[1];
+    // Additional functionality
+    if (grouped)
+      for (int i = 3; i < nObjects; i++){
+        sceneObjs[i].scale+=sy[0]; sceneObjs[i].loc[1]+=sy[1];
+      }
+    else
+    {
+        sceneObjs[toolObj].scale+=sy[0]; sceneObjs[toolObj].loc[1]+=sy[1];
+    }
 }
 
 
@@ -641,6 +661,9 @@ static void mainmenu(int id)
     else if (id == 91 && currObject >= 0) {
       deleteObject(currObject);
     }
+    else if (id == 92) {
+      grouped = !grouped;
+    }
     else if (id == 99) exit(0);
 }
 
@@ -671,8 +694,9 @@ static void makeMenu()
     glutAddSubMenu("Texture",texMenuId);
     glutAddSubMenu("Ground Texture",groundMenuId);
     glutAddSubMenu("Lights",lightMenuId);
-    glutAddMenuEntry("Duplicate object",90);
-    glutAddMenuEntry("Delete object",91);
+    glutAddMenuEntry("Duplicate Object",90);
+    glutAddMenuEntry("Delete Object",91);
+    glutAddMenuEntry("Group/Ungroup All",92);
     glutAddMenuEntry("EXIT", 99);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
