@@ -588,6 +588,10 @@ static void adjustAngleZTexscale(vec2 az_ts)
     sceneObjs[currObject].texScale+=az_ts[1];
 }
 
+// NOTE: J
+// Implementation of duplicating object as individual functionality
+// end NOTE: J
+
 static void duplicateObject(int id) {
 	if (nObjects == maxObjects) return;
 
@@ -597,6 +601,10 @@ static void duplicateObject(int id) {
 			adjustScaleY, mat2(0.05, 0.0, 0.0, 10.0));
 	glutPostRedisplay();
 }
+
+// NOTE: J
+// Implementation of deleting object as individual functionality
+// end NOTE: J
 
 static void deleteObject(int id) {
 	if (nObjects == 3) return;
@@ -680,10 +688,10 @@ void keyboard( unsigned char key, int x, int y )
       }
 }
 
-// NOTE: I [JAKE]
+// NOTE: J [JAKE]
 // Implemented toggle with up and down arrow keys to change
 // current object selected
-// end NOTE: I
+// end NOTE: J
 
 void special( int key, int x, int y )
 {
