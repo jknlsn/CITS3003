@@ -721,32 +721,18 @@ void special( int key, int x, int y )
 {
     switch ( key ) {
     case GLUT_KEY_UP:
-        cout << "UP PRESSED\n";
-        cout << currObject;
-        cout << "\n";
-        if(currObject == nObjects)
-        {
-            currObject = currObject;
-        }
-        else
+        if(currObject != nObjects - 1)
         {
           currObject++;
+          toolObj = currObject;
         }
-        toolObj = currObject;
         break;
     case GLUT_KEY_DOWN:
-        cout << "DOWN PRESSED\n";
-        cout << currObject;
-        cout << "\n";
-        if(currObject == 3)
+        if(currObject != 3)
         {
-            currObject = 3;
+          currObject--;
+          toolObj = currObject;
         }
-        else
-        {
-            currObject--;
-        }
-        toolObj = currObject;
         break;
       }
 }
