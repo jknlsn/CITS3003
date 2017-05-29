@@ -13,13 +13,25 @@ uniform vec4 LightPosition1;
 uniform vec4 LightPosition2;
 uniform mat4 Projection;
 
+// Second part of project
+attribute vec4 boneIDs;
+attribute vec4 boneWeights;
+uniform mat4 boneTransforms[64];
+
 void main()
 {
+    mat4 boneTransform = boneWeights[0]*boneTransforms[int(boneIDs[0])] +
+                        boneWeights[1]*boneTransforms[int(boneIDs[1])] +
+                        boneWeights[2]*boneTransforms[int(boneIDs[2])] +
+                        boneWeights[3]*boneTransforms[int(boneIDs[3])];
 
-    vec4 vpos = vec4(vPosition, 1.0);
+    vec4 vpos = boneTransform * vec4(vPosition, 1.0);
 
     // Transform vertex position into eye coordinates
-    pos = (ModelView * vpos).xyz;
+    pos = (boneTransform * ModelView * vpos).xyz;
+
+    // Tranform the vector normal by the boneTransform matrix
+    // vec4 Normal = boneTransform * vec4(vNormal,1.0);
 
 
     // The vector to the light from the vertex
@@ -28,9 +40,10 @@ void main()
 
     // // Transform vertex normal into eye coordinates (assumes scaling
     // // is uniform across dimensions)
-    // // vec3 N = normalize( (ModelView*vec4(vNormal, 0.0)).xyz );
     N = normalize( (ModelView*vec4(vNormal, 0.0)).xyz );
+    // N = (ModelView  * Normal).xyz;
 
     gl_Position = Projection * ModelView * vpos;
     texCoord = vTexCoord;
+
 }
