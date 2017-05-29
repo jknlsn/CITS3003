@@ -77,7 +77,6 @@ int currObject = -1; // The current object
 int toolObj = -1;    // The object currently being modified
 
 // Additional functionality
-// bool grouped = false;
 bool grouped = false;
 
 //----------------------------------------------------------------------------
@@ -223,8 +222,7 @@ static void adjustLocXZ(vec2 xz)
       for (int i = 3; i < nObjects; i++){
         sceneObjs[i].loc[0]+=xz[0]; sceneObjs[i].loc[2]+=xz[1];
       }
-    else
-    {
+    else {
         sceneObjs[toolObj].loc[0]+=xz[0]; sceneObjs[toolObj].loc[2]+=xz[1];
     }
 }
@@ -236,8 +234,7 @@ static void adjustScaleY(vec2 sy)
       for (int i = 3; i < nObjects; i++){
         sceneObjs[i].scale+=sy[0]; sceneObjs[i].loc[1]+=sy[1];
       }
-    else
-    {
+    else {
         sceneObjs[toolObj].scale+=sy[0]; sceneObjs[toolObj].loc[1]+=sy[1];
     }
 }
@@ -561,15 +558,15 @@ static int createArrayMenu(int size, const char menuEntries[][128], void(*menuFn
 // as well as the amount of shine
 
 static void adjustAmbientDiffuse(vec2 ambience) {
-	SceneObject *obj = &sceneObjs[toolObj];
-	obj -> ambient = max(0.0f, obj -> ambient + ambience[0]);
-	obj -> diffuse = max(0.0f, obj -> diffuse + ambience[1]);
+	// SceneObject *obj = &sceneObjs[toolObj];
+	sceneObjs[toolObj].ambient = max(0.0f, sceneObjs[toolObj].ambient + ambience[0]);
+	sceneObjs[toolObj].diffuse = max(0.0f, sceneObjs[toolObj].diffuse + ambience[1]);
 }
 
 static void adjustSpecularShine(vec2 shine) {
-	SceneObject *obj = &sceneObjs[toolObj];
-	obj -> specular = max(0.0f, obj -> specular + shine[0]);
-	obj -> shine = max(0.0f, obj -> shine + shine[1]);
+	// SceneObject *obj = &sceneObjs[toolObj];
+	sceneObjs[toolObj].specular = max(0.0f, sceneObjs[toolObj].specular + shine[0]);
+	sceneObjs[toolObj].shine = max(0.0f, sceneObjs[toolObj].shine + shine[1]);
 }
 
 // end NOTE: C
