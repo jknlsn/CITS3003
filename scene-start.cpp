@@ -364,7 +364,7 @@ void init( void )
 
     // NOTE: I
     // Light is directional rather than positonal
-    addObject(55); // Sphere for the first light
+    addObject(55); // Sphere for the second light
     sceneObjs[2].loc = vec4(2.5, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
     sceneObjs[2].texId = 0; // Plain texture
