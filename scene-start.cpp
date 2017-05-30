@@ -24,9 +24,6 @@ GLint windowHeight=640, windowWidth=960;
 // added for second part of project
 #include "gnatidread2.h"
 
-// Project part 2
-#include "gnatidread2.h"
-
 using namespace std;        // Import the C++ standard functions (e.g., min)
 
 
@@ -35,9 +32,6 @@ GLuint shaderProgram; // The number identifying the GLSL shader program
 GLuint vPosition, vNormal, vTexCoord; // IDs for vshader input vars (from glGetAttribLocation)
 GLuint vBoneIDs, vBoneWeights, uBoneTransforms; // IDs for animation variables for Part 2
 GLuint projectionU, modelViewU; // IDs for uniform variables (from glGetUniformLocation)
-
-//  added for part 2
-GLuint vBoneIDs, vBoneWeights, uBoneTransforms; // IDs for vshader input vars (from glGetAttribLocation)
 
 // Increased by a factor of 4
 static float viewDist = 6; // Distance from the camera to the centre of the scene
@@ -67,9 +61,10 @@ const aiScene* scenes[numMeshes];
 texture* textures[numTextures]; // An array of texture pointers - see gnatidread.h
 GLuint textureIDs[numTextures]; // Stores the IDs returned by glGenTextures
 
-//********************************
-const aiScene* scenes[numMeshes];
-//********************************
+// TODO: remove
+// //********************************
+// const aiScene* scenes[numMeshes];
+// //********************************
 
 //------Scene Objects---------------------------------------------------------
 //

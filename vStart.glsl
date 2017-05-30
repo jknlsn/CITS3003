@@ -2,10 +2,6 @@ attribute vec3 vPosition;
 attribute vec3 vNormal;
 attribute vec2 vTexCoord;
 
-attribute vec4 boneIDs;
-attribute vec4 boneWeights;
-uniform mat4 boneTransforms[64];
-
 varying vec3 N;
 varying vec3 pos;
 varying vec3 Lvec1;
