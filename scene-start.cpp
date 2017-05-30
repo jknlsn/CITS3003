@@ -438,8 +438,9 @@ void drawMesh(SceneObject sceneObj)
     for (int i=0; i < nBones; i++)
     boneTransforms[i] = mat4(0.0);
 
+    // ANIMATION: Change the 10 value for speed and the 50 value for num frames
     calculateAnimPose(meshes[sceneObj.meshId], scenes[sceneObj.meshId], 0,
-                      1000.0, boneTransforms);
+                      glutGet(GLUT_ELAPSED_TIME)/10%50, boneTransforms);
     glUniformMatrix4fv(uBoneTransforms, nBones, GL_TRUE,
                       (const GLfloat *)boneTransforms);
     CheckError();
