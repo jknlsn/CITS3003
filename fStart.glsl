@@ -21,6 +21,8 @@ uniform float Shininess;
 
 uniform sampler2D texture;
 
+uniform float texScale;
+
 void main()
 {
 
@@ -68,5 +70,5 @@ void main()
 
     color = globalAmbient + ((ambient1 + diffuse1) / dist) + (ambient2 + diffuse2);
     color.a = 1.0;
-    gl_FragColor = color * texture2D( texture, texCoord * 2.0 ) + (specular1 / dist) + specular2;
+    gl_FragColor = color * texture2D( texture, texCoord * texScale ) + (specular1 / dist) + specular2;
 }

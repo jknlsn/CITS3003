@@ -24,12 +24,16 @@ GLint windowHeight=640, windowWidth=960;
 // added for second part of project
 #include "gnatidread2.h"
 
+// Project part 2
+#include "gnatidread2.h"
+
 using namespace std;        // Import the C++ standard functions (e.g., min)
 
 
 // IDs for the GLSL program and GLSL variables.
 GLuint shaderProgram; // The number identifying the GLSL shader program
 GLuint vPosition, vNormal, vTexCoord; // IDs for vshader input vars (from glGetAttribLocation)
+GLuint vBoneIDs, vBoneWeights, uBoneTransforms; // IDs for animation variables for Part 2
 GLuint projectionU, modelViewU; // IDs for uniform variables (from glGetUniformLocation)
 
 //  added for part 2
@@ -62,6 +66,10 @@ const aiScene* scenes[numMeshes];
 //                           (numTextures is defined in gnatidread.h)
 texture* textures[numTextures]; // An array of texture pointers - see gnatidread.h
 GLuint textureIDs[numTextures]; // Stores the IDs returned by glGenTextures
+
+//********************************
+const aiScene* scenes[numMeshes];
+//********************************
 
 //------Scene Objects---------------------------------------------------------
 //
@@ -139,6 +147,9 @@ void loadMeshIfNotAlreadyLoaded(int meshNumber)
     scenes[meshNumber] = scene;
     aiMesh* mesh = scene->mMeshes[0];
     meshes[meshNumber] = mesh;
+    //**********************************
+    // aiMesh* mesh = loadMesh(meshNumber);
+    // meshes[meshNumber] = mesh;
 
     glBindVertexArrayAPPLE( vaoIDs[meshNumber] );
 
@@ -357,6 +368,7 @@ void init( void )
 
     projectionU = glGetUniformLocation(shaderProgram, "Projection");
     modelViewU = glGetUniformLocation(shaderProgram, "ModelView");
+    uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms" );
 
     // added for project second part
     uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms");
@@ -367,21 +379,21 @@ void init( void )
     sceneObjs[0].loc = vec4(0.0, 0.0, 0.0, 1.0);
     sceneObjs[0].scale = 10.0;
     sceneObjs[0].angles[0] = 90.0; // Rotate it.
-    sceneObjs[0].texScale = 5.0; // Repeat the texture.
+    sceneObjs[0].texScale = 5.0; // Repeat the texture
 
     addObject(55); // Sphere for the first light
     sceneObjs[1].loc = vec4(2.0, 1.0, 1.0, 1.0);
     sceneObjs[1].scale = 0.1;
     sceneObjs[1].texId = 0; // Plain texture
-    sceneObjs[1].brightness = 0.1; // The light's brightness is 5 times this (below).
+    sceneObjs[1].brightness = 0.2; // The light's brightness is 5 times this (below).
 
     // NOTE: I
     // Light is directional rather than positonal
-    addObject(55); // Sphere for the first light
+    addObject(55); // Sphere for the second light
     sceneObjs[2].loc = vec4(2.5, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
     sceneObjs[2].texId = 0; // Plain texture
-    sceneObjs[2].brightness = 0.1; // The light's brightness is 5 times this (below).
+    sceneObjs[2].brightness = 0.2; // The light's brightness is 5 times this (below).
     // end NOTE: I
 
     addObject(rand() % numMeshes); // A test mesh
@@ -450,6 +462,7 @@ void drawMesh(SceneObject sceneObj)
                       glutGet(GLUT_ELAPSED_TIME)/10%50, boneTransforms);
     glUniformMatrix4fv(uBoneTransforms, nBones, GL_TRUE,
                       (const GLfloat *)boneTransforms);
+    CheckError();
     //**************
 
     glDrawElements(GL_TRIANGLES, meshes[sceneObj.meshId]->mNumFaces * 3,
