@@ -21,6 +21,8 @@ GLint windowHeight=640, windowWidth=960;
 
 // Modified to fix camera angle on left click.
 #include "gnatidread.h"
+// added for second part of project
+#include "gnatidread2.h"
 
 using namespace std;        // Import the C++ standard functions (e.g., min)
 
