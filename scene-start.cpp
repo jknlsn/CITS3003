@@ -1,3 +1,5 @@
+// TODO: check why diffuse / ambient / specular seem to start at 0
+
 
 #include "Angel.h"
 
