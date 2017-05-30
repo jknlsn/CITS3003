@@ -350,16 +350,16 @@ void init( void )
     CheckError();
 
     // added for project second part
-    vBoneIDs = glGetAttribLocation( shaderProgram, "vBoneIDs");
+    vBoneIDs = glGetAttribLocation( shaderProgram, "boneIDs");
     CheckError();
-    vBoneWeights = glGetAttribLocation( shaderProgram, "vBoneWeights");
+    vBoneWeights = glGetAttribLocation( shaderProgram, "boneWeights");
     CheckError();
 
     projectionU = glGetUniformLocation(shaderProgram, "Projection");
     modelViewU = glGetUniformLocation(shaderProgram, "ModelView");
 
     // added for project second part
-    uBoneTransforms = glGetUniformLocation(shaderProgram, "uBoneTransforms");
+    uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms");
     CheckError();
 
     // Objects 0, and 1 are the ground and the first light.
