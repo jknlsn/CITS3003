@@ -24,7 +24,7 @@ void main()
 
     // The vector to the light from the vertex
     Lvec1 = LightPosition1.xyz - pos;
-    Lvec2 = LightPosition2.xyz - pos;
+    Lvec2 = LightPosition2.xyz;
 
     // // Transform vertex normal into eye coordinates (assumes scaling
     // // is uniform across dimensions)
