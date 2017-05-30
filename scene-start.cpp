@@ -447,7 +447,7 @@ void drawMesh(SceneObject sceneObj)
 
     mat4 boneTransforms[nBones];     // was: mat4 boneTransforms[mesh->mNumBones];
     calculateAnimPose(meshes[sceneObj.meshId], scenes[sceneObj.meshId], 0,
-                      1, boneTransforms);
+                      glutGet(GLUT_ELAPSED_TIME)/10%50, boneTransforms);
     glUniformMatrix4fv(uBoneTransforms, nBones, GL_TRUE,
                       (const GLfloat *)boneTransforms);
     //**************
