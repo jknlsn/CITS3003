@@ -362,8 +362,7 @@ void init( void )
     CheckError();
 
     projectionU = glGetUniformLocation(shaderProgram, "Projection");
-    modelViewU = glGetUniformLocation(shaderProgram, "ModelView");
-    uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms" );
+    modelViewU = glGetUniformLocation(shaderProgram, "ModelView");    
 
     // added for project second part
     uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms");
