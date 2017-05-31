@@ -93,6 +93,13 @@ int toolObj = -1;    // The object currently being modified
 // Additional functionality
 bool grouped = false;
 
+// added walking functionality
+bool walking = true;
+int steps = 0;
+int numSteps = 200;
+bool north = true;
+float speed = 0.005;
+
 //----------------------------------------------------------------------------
 //
 // Loads a texture by number, and binds it for later use.
@@ -362,7 +369,7 @@ void init( void )
     CheckError();
 
     projectionU = glGetUniformLocation(shaderProgram, "Projection");
-    modelViewU = glGetUniformLocation(shaderProgram, "ModelView");    
+    modelViewU = glGetUniformLocation(shaderProgram, "ModelView");
 
     // added for project second part
     uBoneTransforms = glGetUniformLocation(shaderProgram, "boneTransforms");
@@ -482,6 +489,29 @@ void display( void )
     view = Translate(0.0, 0.0, -viewDist) * rotation;
     // view = Translate(0.0, 0.0, -viewDist);
     // end NOTE: A
+
+
+    // amount to move
+    if (walking){
+      vec3 xyz;
+      xyz[0] = 0.000;
+      xyz[1] = 0.000;
+      if (north){
+        xyz[2] = speed;
+      }
+      else {
+        xyz[2] = -speed;
+      }
+      steps++;
+      if (steps == numSteps){
+        steps = 0;
+        north = !north;
+      }
+      sceneObjs[toolObj].loc[0]+=xyz[0];
+      sceneObjs[toolObj].loc[1]+=xyz[1];
+      sceneObjs[toolObj].loc[2]+=xyz[2];
+
+    }
 
     SceneObject lightObj1 = sceneObjs[1];
     vec4 lightPosition1 = view * lightObj1.loc ;
