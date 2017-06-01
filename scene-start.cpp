@@ -95,10 +95,12 @@ bool grouped = false;
 
 // added walking functionality
 bool walking = true;
-int steps = 0;
-int numSteps = 40;
 bool north = true;
+int steps = 0;
+int walkDistance = 2;
 float speed = 0.05;
+int numSteps = walkDistance / speed;
+
 
 //----------------------------------------------------------------------------
 //
@@ -438,6 +440,7 @@ void drawMesh(SceneObject sceneObj)
     // TODO: fix speed being multiplied by number of models?
     // NOTE: what's happening is steps is being incremented each model, so
     // multiple models results in acceleration
+    // TODO:
 
     vec4 xyz;
     if (walking && sceneObj.meshId >= 56){
@@ -451,8 +454,8 @@ void drawMesh(SceneObject sceneObj)
         xyz[2] = (-speed * numSteps) + (speed * steps);
       }
       steps++;
-      if (steps == numSteps){
-        steps = 0;
+      if (steps >= numSteps){
+        steps = 1;
         north = !north;
       }
     }
@@ -770,6 +773,22 @@ static void mainmenu(int id)
     else if (id == 99) exit(0);
 }
 
+static void animationMenu(int id)
+{
+  if (id == 93){
+    speed = 0.01;
+    numSteps = walkDistance / speed;
+  }
+  else if (id == 94){
+    speed = 0.05;
+    numSteps = walkDistance / speed;
+  }
+  else if (id == 95){
+    speed = 0.10;
+    numSteps = walkDistance / speed;
+  }
+}
+
 static void makeMenu()
 {
     int objectId = createArrayMenu(numMeshes, objectMenuEntries, objectMenu);
@@ -788,6 +807,12 @@ static void makeMenu()
     glutAddMenuEntry("Move Light 2",80);
     glutAddMenuEntry("R/G/B/All Light 2",81);
 
+    // Adding animation menu
+    int animationMenuId = glutCreateMenu(animationMenu);
+    glutAddMenuEntry("Tortoise",93);
+    glutAddMenuEntry("Hare",94);
+    glutAddMenuEntry("Ludicrous Mode",95);
+
     glutCreateMenu(mainmenu);
     glutAddMenuEntry("Rotate/Move Camera",50);
     glutAddSubMenu("Add object", objectId);
@@ -800,6 +825,7 @@ static void makeMenu()
     glutAddMenuEntry("Duplicate Object",90);
     glutAddMenuEntry("Delete Object",91);
     glutAddMenuEntry("Group/Ungroup All",92);
+    glutAddSubMenu("Animation",animationMenuId);
     glutAddMenuEntry("EXIT", 99);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
