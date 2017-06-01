@@ -100,6 +100,7 @@ int steps = 0;
 int walkDistance = 2;
 float speed = 0.05;
 int numSteps = walkDistance / speed;
+int frame = 0;
 
 
 //----------------------------------------------------------------------------
@@ -444,7 +445,7 @@ void drawMesh(SceneObject sceneObj)
     // TODO: check whether scale is used, if not then implement
 
     vec4 xyz;
-    if (animated && sceneObj.meshId >= 56){
+    if (sceneObj.meshId >= 56){
       xyz[0] = 0.000;
       xyz[1] = 0.000;
       xyz[3] = 0.000;
@@ -454,7 +455,9 @@ void drawMesh(SceneObject sceneObj)
       else {
         xyz[2] = (-speed * numSteps) + (speed * steps);
       }
-      steps++;
+      if (animated){
+          steps++;
+      }
       if (steps >= numSteps){
         steps = 1;
         north = !north;
@@ -488,8 +491,11 @@ void drawMesh(SceneObject sceneObj)
     // measured in frames, like the frame numbers in Blender.)
 
     mat4 boneTransforms[nBones];     // was: mat4 boneTransforms[mesh->mNumBones];
+    if (animated){
+      frame = glutGet(GLUT_ELAPSED_TIME)/10%60;
+    }
     calculateAnimPose(meshes[sceneObj.meshId], scenes[sceneObj.meshId], 0,
-                      glutGet(GLUT_ELAPSED_TIME)/10%50, boneTransforms);
+                      frame, boneTransforms);
     glUniformMatrix4fv(uBoneTransforms, nBones, GL_TRUE,
                       (const GLfloat *)boneTransforms);
     CheckError();
@@ -844,8 +850,7 @@ static void makeMenu()
     int animationMenuId = glutCreateMenu(animationMenu);
     glutAddSubMenu("Speed",speedMenuId);
     glutAddSubMenu("Distance",distanceMenuId);
-    glutAddMenuEntry("Pause / Unpause", 99);
-
+    glutAddMenuEntry("Freeze / Unfreeze", 99);
 
     glutCreateMenu(mainmenu);
     glutAddMenuEntry("Rotate/Move Camera",50);
