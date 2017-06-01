@@ -96,9 +96,9 @@ bool grouped = false;
 // added walking functionality
 bool walking = true;
 int steps = 0;
-int numSteps = 200;
+int numSteps = 40;
 bool north = true;
-float speed = 0.005;
+float speed = 0.05;
 
 //----------------------------------------------------------------------------
 //
@@ -433,7 +433,32 @@ void drawMesh(SceneObject sceneObj)
     // NOTE: B
     // Allow rotation of object when selected from menu
   	mat4 rotation = RotateX(sceneObj.angles[0]) * RotateY(sceneObj.angles[1]) * RotateZ(sceneObj.angles[2]);
-  	mat4 model = Translate(sceneObj.loc) * rotation * Scale(sceneObj.scale);
+
+    // NOTE: walking animation
+    // TODO: fix speed being multiplied by number of models?
+    // NOTE: what's happening is steps is being incremented each model, so
+    // multiple models results in acceleration
+
+    vec4 xyz;
+    if (walking && sceneObj.meshId >= 56){
+      xyz[0] = 0.000;
+      xyz[1] = 0.000;
+      xyz[3] = 0.000;
+      if (north){
+        xyz[2] = -speed * steps;
+      }
+      else {
+        xyz[2] = (-speed * numSteps) + (speed * steps);
+      }
+      steps++;
+      if (steps == numSteps){
+        steps = 0;
+        north = !north;
+      }
+    }
+    xyz = rotation * xyz;
+
+  	mat4 model = Translate(sceneObj.loc + xyz) * rotation * Scale(sceneObj.scale);
     // mat4 model = Translate(sceneObj.loc) * Scale(sceneObj.scale);
     // end NOTE: B
 
@@ -489,29 +514,6 @@ void display( void )
     view = Translate(0.0, 0.0, -viewDist) * rotation;
     // view = Translate(0.0, 0.0, -viewDist);
     // end NOTE: A
-
-
-    // amount to move
-    if (walking){
-      vec3 xyz;
-      xyz[0] = 0.000;
-      xyz[1] = 0.000;
-      if (north){
-        xyz[2] = speed;
-      }
-      else {
-        xyz[2] = -speed;
-      }
-      steps++;
-      if (steps == numSteps){
-        steps = 0;
-        north = !north;
-      }
-      sceneObjs[toolObj].loc[0]+=xyz[0];
-      sceneObjs[toolObj].loc[1]+=xyz[1];
-      sceneObjs[toolObj].loc[2]+=xyz[2];
-
-    }
 
     SceneObject lightObj1 = sceneObjs[1];
     vec4 lightPosition1 = view * lightObj1.loc ;
