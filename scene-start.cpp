@@ -97,7 +97,7 @@ bool grouped = false;
 
 // added walking functionality
 bool animated = true;
-bool north = true;
+bool ahead = true;
 int steps = 0;
 int walkDistance = 2;
 float speed = 0.05;
@@ -465,7 +465,7 @@ void drawMesh(SceneObject sceneObj)
       xyz[0] = 0.000;
       xyz[1] = 0.000;
       xyz[3] = 0.000;
-      if (north){
+      if (ahead){
         xyz[2] = -speed * steps;
       }
       else {
@@ -476,7 +476,7 @@ void drawMesh(SceneObject sceneObj)
       }
       if (steps >= numSteps){
         steps = 1;
-        north = !north;
+        ahead = !ahead;
       }
     }
     xyz = rotation * xyz;
