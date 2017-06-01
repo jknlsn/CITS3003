@@ -42,7 +42,7 @@ mat4 projection; // Projection matrix - set in the reshape function
 mat4 view; // View matrix - set in the display function.
 
 // These are used to set the window title
-char lab[] = "Project1";
+char lab[] = "CITS3003 Project";
 char *programName = NULL; // Set in main
 int numDisplayCalls = 0; // Used to calculate the number of frames per second
 
@@ -94,7 +94,7 @@ int toolObj = -1;    // The object currently being modified
 bool grouped = false;
 
 // added walking functionality
-bool walking = true;
+bool animated = true;
 bool north = true;
 int steps = 0;
 int walkDistance = 2;
@@ -440,10 +440,11 @@ void drawMesh(SceneObject sceneObj)
     // TODO: fix speed being multiplied by number of models?
     // NOTE: what's happening is steps is being incremented each model, so
     // multiple models results in acceleration
-    // TODO:
+    // bother fixing?
+    // TODO: check whether scale is used, if not then implement
 
     vec4 xyz;
-    if (walking && sceneObj.meshId >= 56){
+    if (animated && sceneObj.meshId >= 56){
       xyz[0] = 0.000;
       xyz[1] = 0.000;
       xyz[3] = 0.000;
@@ -770,10 +771,10 @@ static void mainmenu(int id)
     else if (id == 92) {
       grouped = !grouped;
     }
-    else if (id == 99) exit(0);
+    else if (id == 999) exit(0);
 }
 
-static void animationMenu(int id)
+static void speedMenu(int id)
 {
   if (id == 93){
     speed = 0.01;
@@ -786,6 +787,28 @@ static void animationMenu(int id)
   else if (id == 95){
     speed = 0.10;
     numSteps = walkDistance / speed;
+  }
+}
+
+static void distanceMenu(int id)
+{
+  if (id == 96){
+    walkDistance = walkDistance * 2;
+    numSteps = walkDistance / speed;
+  }
+  else if (id == 97){
+    walkDistance = walkDistance / 2;
+    numSteps = walkDistance / speed;
+  }
+  else if (id == 98){
+    walkDistance = 2;
+    numSteps = walkDistance / speed;
+  }
+}
+
+static void animationMenu(int id){
+  if (id == 99){
+    animated = !animated;
   }
 }
 
@@ -807,11 +830,22 @@ static void makeMenu()
     glutAddMenuEntry("Move Light 2",80);
     glutAddMenuEntry("R/G/B/All Light 2",81);
 
-    // Adding animation menu
-    int animationMenuId = glutCreateMenu(animationMenu);
+    int speedMenuId = glutCreateMenu(speedMenu);
     glutAddMenuEntry("Tortoise",93);
     glutAddMenuEntry("Hare",94);
     glutAddMenuEntry("Ludicrous Mode",95);
+
+    int distanceMenuId = glutCreateMenu(distanceMenu);
+    glutAddMenuEntry("Increase Distance",96);
+    glutAddMenuEntry("Decrease Distance",97);
+    glutAddMenuEntry("Reset Distance",98);
+
+    // Adding animation menu
+    int animationMenuId = glutCreateMenu(animationMenu);
+    glutAddSubMenu("Speed",speedMenuId);
+    glutAddSubMenu("Distance",distanceMenuId);
+    glutAddMenuEntry("Pause / Unpause", 99);
+
 
     glutCreateMenu(mainmenu);
     glutAddMenuEntry("Rotate/Move Camera",50);
@@ -826,7 +860,7 @@ static void makeMenu()
     glutAddMenuEntry("Delete Object",91);
     glutAddMenuEntry("Group/Ungroup All",92);
     glutAddSubMenu("Animation",animationMenuId);
-    glutAddMenuEntry("EXIT", 99);
+    glutAddMenuEntry("EXIT", 999);
     glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
