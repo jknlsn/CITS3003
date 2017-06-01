@@ -405,7 +405,7 @@ void init( void )
     sceneObjs[1].loc = vec4(2.0, 1.0, 1.0, 1.0);
     sceneObjs[1].scale = 0.1;
     sceneObjs[1].texId = 0; // Plain texture
-    sceneObjs[1].brightness = 0.2; // The light's brightness is 5 times this (below).
+    sceneObjs[1].brightness = 0.5; // The light's brightness is 5 times this (below).
 
     // NOTE: I
     // Light is directional rather than positonal
@@ -413,7 +413,7 @@ void init( void )
     sceneObjs[2].loc = vec4(2.5, 1.0, 1.0, 0.0);
     sceneObjs[2].scale = 0.1;
     sceneObjs[2].texId = 0; // Plain texture
-    sceneObjs[2].brightness = 0.2; // The light's brightness is 5 times this (below).
+    sceneObjs[2].brightness = 0.5; // The light's brightness is 5 times this (below).
     // end NOTE: I
 
     addObject(rand() % numMeshes); // A test mesh
@@ -506,7 +506,12 @@ void drawMesh(SceneObject sceneObj)
     // giving the time relative to the start of the animation,
     // measured in frames, like the frame numbers in Blender.)
 
-    mat4 boneTransforms[nBones];     // was: mat4 boneTransforms[mesh->mNumBones];
+    mat4 *boneTransforms;
+    boneTransforms = (mat4 *)malloc(sizeof(mat4)*nBones);
+    // initialize each boneTransforms[i] to a zero matrix
+    for (int i=0; i < nBones; i++)
+        boneTransforms[i] = mat4(0.0);
+
     if (animated){
       frame = glutGet(GLUT_ELAPSED_TIME)/20%sceneObj.frames;
     }
