@@ -34,7 +34,7 @@ GLuint vBoneIDs, vBoneWeights, uBoneTransforms; // IDs for animation variables f
 GLuint projectionU, modelViewU; // IDs for uniform variables (from glGetUniformLocation)
 
 // Increased by a factor of 4
-static float viewDist = 6; // Distance from the camera to the centre of the scene
+static float viewDist = 4; // Distance from the camera to the centre of the scene
 static float camRotSidewaysDeg=0; // rotates the camera sideways around the centre
 static float camRotUpAndOverDeg=20; // rotates the camera up and over the centre.
 
@@ -81,6 +81,8 @@ typedef struct {
     int meshId;
     int texId;
     float texScale;
+    // adding to store frames
+    int frames;
 } SceneObject;
 
 const int maxObjects = 1024; // Scenes with more than 1024 objects seem unlikely
@@ -333,6 +335,20 @@ static void addObject(int id)
     sceneObjs[nObjects].texId = rand() % numTextures;
     sceneObjs[nObjects].texScale = 2.0;
 
+    // added frames for each animated object
+    if (id < 56){
+      sceneObjs[nObjects].frames = 1;
+    }
+    else if (id == 56){
+      sceneObjs[nObjects].frames = 40;
+    }
+    else if (id == 57){
+      sceneObjs[nObjects].frames = 30;
+    }
+    else if (id == 58){
+      sceneObjs[nObjects].frames = 60;
+    }
+
     toolObj = currObject = nObjects++;
     setToolCallbacks(adjustLocXZ, camRotZ(),
                      adjustScaleY, mat2(0.05, 0, 0, 10.0) );
@@ -492,7 +508,7 @@ void drawMesh(SceneObject sceneObj)
 
     mat4 boneTransforms[nBones];     // was: mat4 boneTransforms[mesh->mNumBones];
     if (animated){
-      frame = glutGet(GLUT_ELAPSED_TIME)/10%60;
+      frame = glutGet(GLUT_ELAPSED_TIME)/20%sceneObj.frames;
     }
     calculateAnimPose(meshes[sceneObj.meshId], scenes[sceneObj.meshId], 0,
                       frame, boneTransforms);
