@@ -36,6 +36,7 @@
 
 # Mac
 .DS_Store
+*.plist
 
 # Models folder
 models-textures
@@ -51,3 +52,15 @@ scene-start.dSYM
 *.md
 *.tex
 .pdf
+
+# Models and textures
+*.x
+*.blend
+*.bmp
+*.jpg
+
+!*/
+!model57.x
+!model57.blend
+!model58.x
+!model58.blend
